@@ -1,1181 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Text to Handwriting Converter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@400;700&family=Indie+Flower&family=Pacifico&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Gochi+Hand&family=Architects+Daughter&family=Permanent+Marker&family=Handlee&family=Shadows+Into+Light&family=Amatic+SC:wght@400;700&display=swap"
-        rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>إعلان عن دورة نحو للمرحلة الابتدائية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
-        }
-
-        .dark .bg-white {
-            background-color: #1a1a2e !important;
-        }
-
-        .dark .text-gray-800 {
-            color: #f4f4f4 !important;
-        }
-
-        .dark .text-gray-700 {
-            color: #e0e0e0 !important;
-        }
-
-        .dark .text-gray-100 {
-            color: #f4f4f4 !important;
-        }
-
-        .dark .border-gray-200 {
-            border-color: #374151 !important;
-        }
-
-        .dark .border-blue-400 {
-            border-color: #7f9cf5 !important;
-        }
-
-        .dark .shadow-2xl,
-        .dark .shadow-lg,
-        .dark .shadow-xl {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7) !important;
-        }
-
-        .dark .download-page-button {
-            background-color: #374151 !important;
-            color: #f4f4f4 !important;
-        }
-
-        .dark .download-page-button:hover {
-            background-color: #4b5563 !important;
-        }
-
-        .dark select,
-        .dark textarea,
-        .dark input {
-            background-color: #1a1a2e !important;
-            color: #f4f4f4 !important;
-            border-color: #374151 !important;
-        }
-
-        .dark option {
-            background-color: #1a1a2e !important;
-            color: #f4f4f4 !important;
-        }
-
-        .dark .border-gray-300 {
-            border-color: #374151 !important;
-        }
-
-        .dark .focus\:ring-blue-300:focus {
-            box-shadow: 0 0 0 4px #7f9cf5 !important;
-        }
-
-        .dark .focus\:ring-purple-400:focus {
-            box-shadow: 0 0 0 4px #a78bfa !important;
-        }
-
-        /* Enhanced Font Classes */
-        .font-caveat {
-            font-family: 'Caveat', cursive;
-        }
-
-        .font-dancing-script {
-            font-family: 'Dancing Script', cursive;
-        }
-
-        .font-pacifico {
-            font-family: 'Pacifico', cursive;
-        }
-
-        .font-indie-flower {
-            font-family: 'Indie Flower', cursive;
-        }
-
-        .font-kalam {
-            font-family: 'Kalam', cursive;
-        }
-
-        .font-patrick-hand {
-            font-family: 'Patrick Hand', cursive;
-        }
-
-        .font-gochi-hand {
-            font-family: 'Gochi Hand', cursive;
-        }
-
-        .font-architects-daughter {
-            font-family: 'Architects Daughter', cursive;
-        }
-
-        .font-permanent-marker {
-            font-family: 'Permanent Marker', cursive;
-        }
-
-        .font-handlee {
-            font-family: 'Handlee', cursive;
-        }
-
-        .font-shadows-into-light {
-            font-family: 'Shadows Into Light', cursive;
-        }
-
-        .font-amatic-sc {
-            font-family: 'Amatic SC', cursive;
-        }
-
-        /* Natural handwriting effects */
-        .handwriting-natural {
-            transform: rotate(-0.5deg);
-            letter-spacing: 0.05em;
-        }
-
-        .handwriting-natural .page-content {
-            transform: rotate(0.3deg);
-        }
-
-        /* Container for multiple notebook pages */
-        #handwritingOutput {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-height: 250px;
+            background: #f5ecd7;
+            font-family: 'Cairo', Arial, sans-serif;
+            margin: 0;
             padding: 0;
-            box-shadow: none;
-            background-color: transparent;
+            direction: rtl;
         }
 
-        /* Wrapper for each page and its button */
-        .page-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .page-wrapper:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark .page-wrapper {
-            background-color: #2d3748;
-            border-color: #4a5568;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .dark .page-wrapper:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Base styling for each notebook page */
-        .notebook-page {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        .flyer-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: #fff8ee;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px #e0cfa3;
+            padding: 32px 24px 24px 24px;
             position: relative;
             overflow: hidden;
-            box-sizing: border-box;
-            width: 100%;
-            padding: 20px 25px;
-            line-height: 1.5;
-            font-size: 20px;
-            color: #1a202c;
-            border: 1px solid #d1d5db;
-            transition: all 0.3s ease;
         }
 
-        /* Paper texture overlay */
-        .paper-texture::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.03) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
+        .header-icons {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 8px;
         }
 
-        /* Always-reserved free area at the bottom of each page */
-        .notebook-page-bottom-space {
-            height: 40px;
-            width: 100%;
-            pointer-events: none;
+        .flyer-title {
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #b77b2b;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
-        /* Canvas for drawing lines - positioned absolutely behind text */
-        .notebook-page canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background-color: transparent;
+        .subheading {
+            font-size: 1.1em;
+            color: #4d3c1a;
+            text-align: center;
+            margin-bottom: 18px;
         }
 
-        /* Text content on the page - positioned relatively above canvas */
-        .notebook-page .page-content {
-            position: relative;
-            z-index: 2;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        .highlight-orange {
+            background: #ffb347;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 16px;
+            display: inline-block;
+            margin: 0 auto 16px auto;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 2px 8px #ffe0b2;
         }
 
-        /* Red margin line for the notebook */
-        .notebook-page::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 20px;
-            width: 1px;
-            height: 100%;
-            background-color: #f44336;
-            box-shadow: 1px 0 0 rgba(255, 0, 0, 0.2);
-            z-index: 1;
+        .boxed-title {
+            border: 2px solid #b77b2b;
+            background: #fff3e0;
+            color: #b77b2b;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 12px;
+            padding: 8px 0;
+            text-align: center;
+            margin: 18px 0 10px 0;
+            box-shadow: 0 2px 8px #f5e0c3;
         }
 
-        /* Specific styles for plain and dotted to remove red margin */
-        .notebook-page.notebook-plain::after,
-        .notebook-page.notebook-dotted::after {
-            content: none;
-        }
-
-        /* Styling for the per-page download button */
-        .download-page-button {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-            font-weight: 600;
-        }
-
-        .download-page-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-        }
-
-        /* Styles for individual page controls */
-        .page-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .page-controls select,
-        .page-controls input {
-            flex: 1 1 auto;
-            min-width: 120px;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            color: #333;
-            font-size: 0.9rem;
-        }
-
-        .dark .page-controls select,
-        .dark .page-controls input {
-            background-color: #374151 !important;
-            color: #f4f4f4 !important;
-            border-color: #4b5563 !important;
-        }
-
-        .page-controls button {
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Advanced controls styling */
-        .advanced-controls {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-        }
-
-        .dark .advanced-controls {
-            background: linear-gradient(135deg, #2d3748 0%, #374151 100%);
-            border-color: #4a5568;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .teacher-section {
+            text-align: center;
             margin-bottom: 10px;
         }
 
-        .slider {
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #ddd;
-            outline: none;
-            transition: background 0.3s ease;
+        .teacher-name {
+            font-size: 1.1em;
+            color: #2d5c8a;
+            font-weight: bold;
+            margin-bottom: 4px;
         }
 
-        .slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #4CAF50;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        .teacher-desc {
+            font-size: 1em;
+            color: #6d4c1b;
+            margin-bottom: 10px;
         }
 
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #4CAF50;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        .section-title {
+            color: #2176ae;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 18px 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Word count display */
-        .word-count {
-            font-size: 0.9rem;
-            color: #666;
-            text-align: right;
-            margin-top: 5px;
+        .section-title .icon {
+            font-size: 1.2em;
         }
 
-        .dark .word-count {
-            color: #ccc;
+        .bullets {
+            margin: 0 0 18px 0;
+            padding: 0 18px 0 0;
+            list-style: none;
         }
 
-        /* Enhanced modal styling */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .bullets li {
+            color: #8d5524;
+            font-size: 1em;
+            margin-bottom: 8px;
+            position: relative;
+            padding-right: 28px;
+        }
+
+        .bullets li::before {
+            content: "📚";
+            position: absolute;
             right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0;
+            font-size: 1.1em;
+        }
+
+        .bottom-contact {
+            background: #e3eafc;
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            color: #2d5c8a;
+            font-size: 1.1em;
+            margin-top: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
+            gap: 8px;
         }
 
-        .modal-content {
-            background: #fff;
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 90vw;
-            max-height: 90vh;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transform: scale(0.9);
-            opacity: 0;
-            transition: all 0.3s ease;
+        .whatsapp-icon {
+            font-size: 1.3em;
+            color: #25d366;
+            vertical-align: middle;
         }
 
-        .modal-content.show {
-            transform: scale(1);
-            opacity: 1;
+        .footer-icons {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 1.5em;
+            color: #b77b2b;
         }
 
-        .dark .modal-content {
-            background: #1a1a2e;
-            color: #f4f4f4;
-        }
-
-        /* Collapsible sections */
-        .collapsible {
+        .flyer-btn {
+            background: #ffb347;
+            color: #fff;
+            font-weight: bold;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 24px;
+            font-size: 1.1em;
+            text-decoration: none;
+            box-shadow: 0 2px 8px #ffe0b2;
+            transition: background 0.2s;
             cursor: pointer;
-            padding: 10px;
-            background: #f1f3f4;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-            user-select: none;
+            display: inline-block;
         }
 
-        .collapsible:hover {
-            background: #e8eaed;
-        }
-
-        .dark .collapsible {
-            background: #374151;
-            color: #f4f4f4;
-        }
-
-        .dark .collapsible:hover {
-            background: #4b5563;
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .collapsible-content.active {
-            max-height: 500px;
-        }
-
-        /* Responsive design improvements */
-        @media (max-width: 768px) {
-            .page-controls {
-                flex-direction: column;
-            }
-
-            .page-controls select,
-            .page-controls input {
-                min-width: 100%;
-            }
-
-            .slider-container {
-                flex-direction: column;
-                text-align: center;
-            }
+        .flyer-btn:hover {
+            background: #ffa726;
         }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center p-4"
-    id="mainBody">
-    <button id="darkModeToggle"
-        class="fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300 hover:bg-gray-700 focus:outline-none">
-        🌙 Dark Mode
-    </button>
-
-    <div
-        class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-4xl transform transition-all duration-300 hover:scale-[1.01] border border-gray-200 relative overflow-hidden">
-        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6 tracking-tight">
-            ✍️ Enhanced Handwriting Converter
-        </h1>
-
-        <div class="mb-6">
-            <label for="inputText" class="block text-gray-700 text-lg font-semibold mb-2">
-                Enter your text below:
-            </label>
-            <textarea id="inputText"
-                class="w-full p-4 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-200 text-base resize-y min-h-[150px] shadow-sm"
-                placeholder="Type your message here..."></textarea>
-            <div class="word-count" id="wordCount">0 words, 0 characters</div>
+<body>
+    <div class="flyer-container">
+        <div class="header-icons">
+            <img src="children-reading.png" alt="أطفال يقرؤون" style="height:120px;vertical-align:middle;">
         </div>
-
-        <!-- Advanced Controls (Collapsible) -->
-        <div class="collapsible" onclick="toggleCollapsible('advancedControls')">
-            <div class="flex items-center justify-between">
-                <span class="font-semibold">🎨 Advanced Styling Options</span>
-                <span class="text-xl transform transition-transform duration-300" id="advancedArrow">▼</span>
+        <div class="flyer-title">
+            إعلان عن دورة نحو للمرحلة الابتدائية
+        </div>
+        <div class="subheading">
+            هل يعاني طفلك صعوبة في فهم القواعد النحوية؟<br>
+            هل ترغبين في تأسيسه نحويا بطريقة سليمة؟
+        </div>
+        <div class="highlight-orange">
+            معنا متعة التعلم — انضمي الآن إلى:
+        </div>
+        <div class="boxed-title">
+            دورة المرحلة الابتدائية
+        </div>
+        <div class="teacher-section">
+            <div class="teacher-name">مع المعلمة/ صباح فتحي</div>
+            <div class="teacher-desc">
+                معلم أول (أ) لغة عربية.<br>
+                متميزة في تبسيط النحو وتدريب الطلاب على الفهم والتطبيق
             </div>
         </div>
-        <div class="collapsible-content" id="advancedControls">
-            <div class="advanced-controls">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="slider-container">
-                        <label>Text Size:</label>
-                        <input type="range" id="textSizeSlider" class="slider" min="12" max="36" value="20">
-                        <span id="textSizeValue">20px</span>
-                    </div>
-                    <div class="slider-container">
-                        <label>Line Height:</label>
-                        <input type="range" id="lineHeightSlider" class="slider" min="1.2" max="2.5" step="0.1"
-                            value="1.5">
-                        <span id="lineHeightValue">1.5</span>
-                    </div>
-                    <div class="slider-container">
-                        <label>Letter Spacing:</label>
-                        <input type="range" id="letterSpacingSlider" class="slider" min="0" max="5" step="0.1"
-                            value="0.5">
-                        <span id="letterSpacingValue">0.5px</span>
-                    </div>
-                    <div class="slider-container">
-                        <label>Text Rotation:</label>
-                        <input type="range" id="rotationSlider" class="slider" min="-3" max="3" step="0.1" value="0">
-                        <span id="rotationValue">0°</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 mt-4">
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" id="naturalHandwriting" checked>
-                        <span>Natural handwriting effect</span>
-                    </label>
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" id="paperTexture" checked>
-                        <span>Paper texture</span>
-                    </label>
-                </div>
-            </div>
+        <div class="section-title">
+            <img src="pencil.png" alt="قلم رصاص" style="height:28px;vertical-align:middle;">
+            <span>محتوى الدورة:</span>
         </div>
-
-        <!-- Default Settings -->
-        <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label for="notebookType" class="block text-gray-700 text-lg font-semibold mb-2">
-                    Default Notebook Type:
-                </label>
-                <select id="notebookType"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-200 text-base shadow-sm appearance-none bg-white pr-8">
-                    <option value="notebook-ruled">Ruled Notebook</option>
-                    <option value="notebook-graph">Graph Notebook</option>
-                    <option value="notebook-dotted">Dotted Notebook</option>
-                    <option value="notebook-plain">Plain Paper</option>
-                    <option value="notebook-wide-ruled">Wide Ruled Notebook</option>
-                    <option value="notebook-narrow-ruled">Narrow Ruled Notebook</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="fontType" class="block text-gray-700 text-lg font-semibold mb-2">
-                    Default Handwriting Font:
-                </label>
-                <select id="fontType"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-200 text-base shadow-sm appearance-none bg-white pr-8">
-                    <option value="font-caveat">Caveat</option>
-                    <option value="font-dancing-script">Dancing Script</option>
-                    <option value="font-indie-flower">Indie Flower</option>
-                    <option value="font-pacifico">Pacifico</option>
-                    <option value="font-kalam">Kalam</option>
-                    <option value="font-patrick-hand">Patrick Hand</option>
-                    <option value="font-gochi-hand">Gochi Hand</option>
-                    <option value="font-architects-daughter">Architects Daughter</option>
-                    <option value="font-permanent-marker">Permanent Marker</option>
-                    <option value="font-handlee">Handlee</option>
-                    <option value="font-shadows-into-light">Shadows Into Light</option>
-                    <option value="font-amatic-sc">Amatic SC</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="textColor" class="block text-gray-700 text-lg font-semibold mb-2">
-                    Default Text Color:
-                </label>
-                <select id="textColor"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-200 text-base shadow-sm appearance-none bg-white pr-8">
-                    <option value="#1a202c">Black</option>
-                    <option value="#e11d48">Red</option>
-                    <option value="#2563eb">Blue</option>
-                    <option value="#059669">Green</option>
-                    <option value="#f59e42">Orange</option>
-                    <option value="#fbbf24">Yellow</option>
-                    <option value="#6d28d9">Purple</option>
-                    <option value="#64748b">Gray</option>
-                    <option value="#8b5cf6">Violet</option>
-                    <option value="#ec4899">Pink</option>
-                </select>
-            </div>
+        <img src="children-reading.png" style="height:200px;width:200px;margin-left:0;float:left;margin-top:-20px;">
+        <ul class="bullets">
+            <li><img src="books.png" alt="كتاب" style="height:22px;vertical-align:middle;margin-left:6px;">شرح مبسط
+                لقواعد النحو الأساسية</li>
+            <li><img src="books.png" alt="كتاب" style="height:22px;vertical-align:middle;margin-left:6px;">تطبيقات
+                مستمرة</li>
+            <li><img src="books.png" alt="كتاب" style="height:22px;vertical-align:middle;margin-left:6px;">متابعة فردية
+                لكل طالب</li>
+            <li><img src="books.png" alt="كتاب" style="height:22px;vertical-align:middle;margin-left:6px;">نماذج
+                امتحانات وتدريب عملي</li>
+        </ul>
+        <div style="text-align:center; margin-bottom: 18px;">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfFzBSQM75274wN4vIGIhfErYnGY9jniwofwNNoxrKLXuKLxQ/viewform?usp=sharing&ouid=117374958132998682436"
+                class="flyer-btn" target="_blank" rel="noopener">سجّل الآن</a>
         </div>
-
-        <div class="flex flex-col sm:flex-row gap-4 mb-8" id="downloadButtonsRow">
-            <button id="convertButton"
-                class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-400">
-                ✨ Convert to Handwriting
-            </button>
-            <button id="downloadAllPagesButton"
-                class="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-400">
-                📄 Download All Pages
-            </button>
-            <button id="importFileButton"
-                class="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-400">
-                📁 Import Text File
-            </button>
+        <div class="bottom-contact">
+            <span>للتواصل والاستفسار عبر واتساب:</span>
+            <a href="https://wa.me/201050077872" target="_blank"
+                style="display:flex;align-items:center;gap:6px;text-decoration:none;color:#2d5c8a;font-weight:bold;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب"
+                    style="height:28px;vertical-align:middle;">
+                <span>01050077872</span>
+            </a>
         </div>
-
-        <!-- Hidden file input -->
-        <input type="file" id="fileInput" accept=".txt" style="display: none;">
-
-        <!-- Download Options Modal -->
-        <div id="downloadOptionsModal" class="modal-overlay" style="display: none;">
-            <div class="modal-content" id="downloadOptionsContent">
-                <button id="closeDownloadOptions"
-                    class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-                <h3 class="text-2xl font-bold mb-4 text-center text-purple-700">📥 Download Options</h3>
-                <p class="mb-6 text-center text-gray-600">Choose how you'd like to download your handwritten pages:</p>
-
-                <div class="space-y-4">
-                    <button id="downloadSeparateBtn"
-                        class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
-                        🗂️ Each page as separate images
-                    </button>
-                    <button id="downloadCombinedBtn"
-                        class="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
-                        📋 All pages as single image
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-400 pb-2">
-                ✍️ Your Text in Handwriting:
-            </h2>
-            <div id="handwritingOutput">
-            </div>
+        <div class="footer-icons">
+            <img src="books.png" alt="كتاب" style="height:32px;vertical-align:middle;">
+            <img src="pencil.png" alt="قلم رصاص" style="height:32px;vertical-align:middle;">
+            <img src="children-reading.png" alt="أطفال يقرؤون" style="height:32px;vertical-align:middle;">
         </div>
     </div>
+</body>
 
-    <script>
-        // Get references to the DOM elements
-        const inputText = document.getElementById('inputText');
-        const convertButton = document.getElementById('convertButton');
-        const downloadAllPagesButton = document.getElementById('downloadAllPagesButton');
-        const importFileButton = document.getElementById('importFileButton');
-        const fileInput = document.getElementById('fileInput');
-        const notebookTypeSelectDefault = document.getElementById('notebookType');
-        const fontTypeSelectDefault = document.getElementById('fontType');
-        const textColorSelectDefault = document.getElementById('textColor');
-        const handwritingOutput = document.getElementById('handwritingOutput');
-        const wordCount = document.getElementById('wordCount');
-
-        // Advanced controls
-        const textSizeSlider = document.getElementById('textSizeSlider');
-        const lineHeightSlider = document.getElementById('lineHeightSlider');
-        const letterSpacingSlider = document.getElementById('letterSpacingSlider');
-        const rotationSlider = document.getElementById('rotationSlider');
-        const naturalHandwriting = document.getElementById('naturalHandwriting');
-        const paperTexture = document.getElementById('paperTexture');
-
-        // Download options modal elements
-        const downloadOptionsModal = document.getElementById('downloadOptionsModal');
-        const downloadSeparateBtn = document.getElementById('downloadSeparateBtn');
-        const downloadCombinedBtn = document.getElementById('downloadCombinedBtn');
-        const closeDownloadOptions = document.getElementById('closeDownloadOptions');
-
-        // Enhanced notebook styles
-        const notebookStyles = {
-            'notebook-ruled': { lineHeight: 25, fontSize: 20, padding: 20, lineColor: '#d0d0d0', type: 'ruled', backgroundColor: '#fff', marginLineColor: '#f44336' },
-            'notebook-graph': { lineHeight: 25, fontSize: 20, padding: 20, lineColor: '#d0d0d0', type: 'graph', backgroundColor: '#fff', marginLineColor: '#f44336' },
-            'notebook-plain': { lineHeight: 30, fontSize: 20, padding: 20, lineColor: 'transparent', type: 'plain', backgroundColor: '#fff', marginLineColor: 'transparent' },
-            'notebook-dotted': { lineHeight: 25, fontSize: 20, padding: 20, lineColor: '#a0a0a0', dotRadius: 1.5, type: 'dotted', backgroundColor: '#fff', marginLineColor: '#f44336' },
-            'notebook-wide-ruled': { lineHeight: 35, fontSize: 28, padding: 20, lineColor: '#d0d0d0', type: 'ruled', backgroundColor: '#fff', marginLineColor: '#f44336' },
-            'notebook-narrow-ruled': { lineHeight: 18, fontSize: 14, padding: 20, lineColor: '#d0d0d0', type: 'ruled', backgroundColor: '#fff', marginLineColor: '#f44336' }
-        };
-
-        // Enhanced font classes
-        const fontClasses = [
-            'font-caveat', 'font-dancing-script', 'font-pacifico', 'font-indie-flower',
-            'font-kalam', 'font-patrick-hand', 'font-gochi-hand',
-            'font-architects-daughter', 'font-permanent-marker', 'font-handlee',
-            'font-shadows-into-light', 'font-amatic-sc'
-        ];
-
-        // Enhanced text colors
-        const textColors = [
-            { value: "#1a202c", name: "Black" },
-            { value: "#e11d48", name: "Red" },
-            { value: "#2563eb", name: "Blue" },
-            { value: "#059669", name: "Green" },
-            { value: "#f59e42", name: "Orange" },
-            { value: "#fbbf24", name: "Yellow" },
-            { value: "#6d28d9", name: "Purple" },
-            { value: "#64748b", name: "Gray" },
-            { value: "#8b5cf6", name: "Violet" },
-            { value: "#ec4899", name: "Pink" }
-        ];
-
-        // Debounce function for performance
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    // Global variables
-    let pages = [];
-    let currentPageIndex = 0;
-
-    // Initialize the application
-    function init() {
-        setupEventListeners();
-        updateSliderDisplays();
-        updateWordCount();
-        setInitialFocus();
-    }
-
-    function setupEventListeners() {
-        // Main buttons
-        convertButton.addEventListener('click', convertToHandwriting);
-        downloadAllPagesButton.addEventListener('click', showDownloadOptions);
-        importFileButton.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleFileImport);
-
-        // Input text area
-        inputText.addEventListener('input', debounce(updateWordCount, 300));
-
-        // Advanced controls
-        textSizeSlider.addEventListener('input', updateSliderDisplays);
-        lineHeightSlider.addEventListener('input', updateSliderDisplays);
-        letterSpacingSlider.addEventListener('input', updateSliderDisplays);
-        rotationSlider.addEventListener('input', updateSliderDisplays);
-
-        // Download modal
-        downloadSeparateBtn.addEventListener('click', () => downloadAllPages('separate'));
-        downloadCombinedBtn.addEventListener('click', () => downloadAllPages('combined'));
-        closeDownloadOptions.addEventListener('click', hideDownloadOptions);
-        downloadOptionsModal.addEventListener('click', (e) => {
-            if (e.target === downloadOptionsModal) hideDownloadOptions();
-        });
-
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', handleKeyboardShortcuts);
-    }
-
-    function updateSliderDisplays() {
-        document.getElementById('textSizeValue').textContent = textSizeSlider.value + 'px';
-        document.getElementById('lineHeightValue').textContent = lineHeightSlider.value;
-        document.getElementById('letterSpacingValue').textContent = letterSpacingSlider.value + 'px';
-        document.getElementById('rotationValue').textContent = rotationSlider.value + '°';
-    }
-
-    function updateWordCount() {
-        const text = inputText.value;
-        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-        const characters = text.length;
-        wordCount.textContent = `${words} words, ${characters} characters`;
-    }
-
-    function setInitialFocus() {
-        inputText.focus();
-    }
-
-    function handleFileImport(event) {
-        const file = event.target.files[0];
-        if (file && file.type === 'text/plain') {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                inputText.value = e.target.result;
-                updateWordCount();
-            };
-            reader.readAsText(file);
-        } else {
-            alert('Please select a valid text file (.txt)');
-        }
-    }
-
-    function convertToHandwriting() {
-        const text = inputText.value.trim();
-        if (!text) {
-            alert('Please enter some text to convert!');
-            return;
-        }
-
-        // Clear previous output
-        handwritingOutput.innerHTML = '';
-        pages = [];
-
-        // Split text into pages (approximately 15-20 lines per page)
-        const lines = text.split('\n');
-        const linesPerPage = 15;
-        const textPages = [];
-
-        for (let i = 0; i < lines.length; i += linesPerPage) {
-            textPages.push(lines.slice(i, i + linesPerPage).join('\n'));
-        }
-
-        // Create pages
-        textPages.forEach((pageText, index) => {
-            createPage(pageText, index);
-        });
-
-        // Scroll to output
-        handwritingOutput.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function createPage(text, pageIndex) {
-        const pageWrapper = document.createElement('div');
-        pageWrapper.className = 'page-wrapper';
-        pageWrapper.setAttribute('data-page-index', pageIndex);
-
-        const notebookPage = document.createElement('div');
-        notebookPage.className = 'notebook-page';
-
-        // Apply default settings
-        const notebookType = notebookTypeSelectDefault.value;
-        const fontType = fontTypeSelectDefault.value;
-        const textColor = textColorSelectDefault.value;
-
-        notebookPage.classList.add(notebookType);
-        notebookPage.classList.add(fontType);
-
-        // Apply advanced settings
-        applyAdvancedSettings(notebookPage);
-
-        // Add paper texture if enabled
-        if (paperTexture.checked) {
-            notebookPage.classList.add('paper-texture');
-        }
-
-        // Create canvas for notebook lines
-        const canvas = document.createElement('canvas');
-        notebookPage.appendChild(canvas);
-
-        // Create content div
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'page-content';
-        contentDiv.textContent = text;
-        contentDiv.style.color = textColor;
-        notebookPage.appendChild(contentDiv);
-
-        // Create bottom space
-        const bottomSpace = document.createElement('div');
-        bottomSpace.className = 'notebook-page-bottom-space';
-        notebookPage.appendChild(bottomSpace);
-
-        // Draw notebook lines
-        drawNotebookLines(canvas, notebookType);
-
-        // Create page controls
-        const pageControls = createPageControls(pageIndex);
-
-        // Create download button for this page
-        const downloadButton = document.createElement('button');
-        downloadButton.className = 'download-page-button';
-        downloadButton.textContent = `Download Page ${pageIndex + 1}`;
-        downloadButton.addEventListener('click', () => downloadSinglePage(pageIndex));
-
-        // Assemble page wrapper
-        pageWrapper.appendChild(notebookPage);
-        pageWrapper.appendChild(pageControls);
-        pageWrapper.appendChild(downloadButton);
-
-        // Add to output
-        handwritingOutput.appendChild(pageWrapper);
-
-        // Store page reference
-        pages.push({
-            element: notebookPage,
-            wrapper: pageWrapper,
-            controls: pageControls,
-            text: text,
-            index: pageIndex
-        });
-    }
-
-    function createPageControls(pageIndex) {
-        const controls = document.createElement('div');
-        controls.className = 'page-controls';
-
-        // Notebook type selector
-        const notebookSelect = document.createElement('select');
-        notebookSelect.innerHTML = notebookTypeSelectDefault.innerHTML;
-        notebookSelect.value = notebookTypeSelectDefault.value;
-        notebookSelect.addEventListener('change', (e) => updatePageStyle(pageIndex, 'notebook', e.target.value));
-
-        // Font selector
-        const fontSelect = document.createElement('select');
-        fontSelect.innerHTML = fontTypeSelectDefault.innerHTML;
-        fontSelect.value = fontTypeSelectDefault.value;
-        fontSelect.addEventListener('change', (e) => updatePageStyle(pageIndex, 'font', e.target.value));
-
-        // Color selector
-        const colorSelect = document.createElement('select');
-        colorSelect.innerHTML = textColorSelectDefault.innerHTML;
-        colorSelect.value = textColorSelectDefault.value;
-        colorSelect.addEventListener('change', (e) => updatePageStyle(pageIndex, 'color', e.target.value));
-
-        controls.appendChild(notebookSelect);
-        controls.appendChild(fontSelect);
-        controls.appendChild(colorSelect);
-
-        return controls;
-    }
-
-    function updatePageStyle(pageIndex, type, value) {
-        const page = pages[pageIndex];
-        if (!page) return;
-
-        const notebookPage = page.element;
-        const contentDiv = notebookPage.querySelector('.page-content');
-
-        if (type === 'notebook') {
-            // Remove old notebook classes
-            Object.keys(notebookStyles).forEach(style => {
-                notebookPage.classList.remove(style);
-            });
-            // Add new notebook class
-            notebookPage.classList.add(value);
-
-            // Redraw lines
-            const canvas = notebookPage.querySelector('canvas');
-            drawNotebookLines(canvas, value);
-        } else if (type === 'font') {
-            // Remove old font classes
-            fontClasses.forEach(fontClass => {
-                notebookPage.classList.remove(fontClass);
-            });
-            // Add new font class
-            notebookPage.classList.add(value);
-        } else if (type === 'color') {
-            contentDiv.style.color = value;
-        }
-    }
-
-    function applyAdvancedSettings(element) {
-        const fontSize = textSizeSlider.value + 'px';
-        const lineHeight = lineHeightSlider.value;
-        const letterSpacing = letterSpacingSlider.value + 'px';
-        const rotation = rotationSlider.value + 'deg';
-
-        const contentDiv = element.querySelector('.page-content') || element;
-        contentDiv.style.fontSize = fontSize;
-        contentDiv.style.lineHeight = lineHeight;
-        contentDiv.style.letterSpacing = letterSpacing;
-
-        if (naturalHandwriting.checked) {
-            element.classList.add('handwriting-natural');
-        } else {
-            element.classList.remove('handwriting-natural');
-        }
-
-        if (Math.abs(parseFloat(rotationSlider.value)) > 0) {
-            element.style.transform = `rotate(${rotation})`;
-        }
-    }
-
-    function drawNotebookLines(canvas, notebookType) {
-        const style = notebookStyles[notebookType];
-        if (!style) return;
-
-        const ctx = canvas.getContext('2d');
-        const parent = canvas.parentElement;
-
-        // Set canvas size to match parent
-        canvas.width = parent.offsetWidth;
-        canvas.height = parent.offsetHeight;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (style.type === 'ruled') {
-            drawRuledLines(ctx, canvas.width, canvas.height, style);
-        } else if (style.type === 'graph') {
-            drawGraphLines(ctx, canvas.width, canvas.height, style);
-        } else if (style.type === 'dotted') {
-            drawDottedLines(ctx, canvas.width, canvas.height, style);
-        }
-    }
-
-    function drawRuledLines(ctx, width, height, style) {
-        ctx.strokeStyle = style.lineColor;
-        ctx.lineWidth = 1;
-
-        for (let y = style.padding; y < height - style.padding; y += style.lineHeight) {
-            ctx.beginPath();
-            ctx.moveTo(style.padding, y);
-            ctx.lineTo(width - style.padding, y);
-            ctx.stroke();
-        }
-    }
-
-    function drawGraphLines(ctx, width, height, style) {
-        ctx.strokeStyle = style.lineColor;
-        ctx.lineWidth = 0.5;
-
-        // Horizontal lines
-        for (let y = style.padding; y < height - style.padding; y += style.lineHeight) {
-            ctx.beginPath();
-            ctx.moveTo(style.padding, y);
-            ctx.lineTo(width - style.padding, y);
-            ctx.stroke();
-        }
-
-        // Vertical lines
-        for (let x = style.padding; x < width - style.padding; x += style.lineHeight) {
-            ctx.beginPath();
-            ctx.moveTo(x, style.padding);
-            ctx.lineTo(x, height - style.padding);
-            ctx.stroke();
-        }
-    }
-
-    function drawDottedLines(ctx, width, height, style) {
-        ctx.fillStyle = style.lineColor;
-
-        for (let y = style.padding; y < height - style.padding; y += style.lineHeight) {
-            for (let x = style.padding; x < width - style.padding; x += style.lineHeight) {
-                ctx.beginPath();
-                ctx.arc(x, y, style.dotRadius, 0, 2 * Math.PI);
-                ctx.fill();
-            }
-        }
-    }
-
-    function showDownloadOptions() {
-        if (pages.length === 0) {
-            alert('Please convert text to handwriting first!');
-            return;
-        }
-
-        downloadOptionsModal.style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('downloadOptionsContent').classList.add('show');
-        }, 50);
-    }
-
-    function hideDownloadOptions() {
-        document.getElementById('downloadOptionsContent').classList.remove('show');
-        setTimeout(() => {
-            downloadOptionsModal.style.display = 'none';
-        }, 300);
-    }
-
-    function downloadSinglePage(pageIndex) {
-        const page = pages[pageIndex];
-        if (!page) return;
-
-        html2canvas(page.element, {
-            backgroundColor: '#ffffff',
-            scale: 2,
-            useCORS: true,
-            allowTaint: true
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `handwriting_page_${pageIndex + 1}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        }).catch(error => {
-            console.error('Error generating image:', error);
-            alert('Error generating image. Please try again.');
-        });
-    }
-
-    function downloadAllPages(type) {
-        hideDownloadOptions();
-
-        if (type === 'separate') {
-            downloadAllPagesSeparate();
-        } else if (type === 'combined') {
-            downloadAllPagesCombined();
-        }
-    }
-
-    function downloadAllPagesSeparate() {
-        pages.forEach((page, index) => {
-            setTimeout(() => {
-                downloadSinglePage(index);
-            }, index * 500); // Stagger downloads
-        });
-    }
-
-    function downloadAllPagesCombined() {
-        const combinedDiv = document.createElement('div');
-        combinedDiv.style.display = 'flex';
-        combinedDiv.style.flexDirection = 'column';
-        combinedDiv.style.gap = '20px';
-        combinedDiv.style.padding = '20px';
-        combinedDiv.style.backgroundColor = '#ffffff';
-
-        pages.forEach(page => {
-            const clonedPage = page.element.cloneNode(true);
-            combinedDiv.appendChild(clonedPage);
-        });
-
-        document.body.appendChild(combinedDiv);
-
-        html2canvas(combinedDiv, {
-            backgroundColor: '#ffffff',
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            height: combinedDiv.scrollHeight,
-            width: combinedDiv.scrollWidth
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'handwriting_all_pages.png';
-            link.href = canvas.toDataURL();
-            link.click();
-            document.body.removeChild(combinedDiv);
-        }).catch(error => {
-            console.error('Error generating combined image:', error);
-            alert('Error generating combined image. Please try again.');
-            document.body.removeChild(combinedDiv);
-        });
-    }
-
-    function toggleDarkMode() {
-        const body = document.body;
-        const darkModeToggle = document.getElementById('darkModeToggle');
-
-        body.classList.toggle('dark');
-
-        if (body.classList.contains('dark')) {
-            darkModeToggle.textContent = '☀️ Light Mode';
-        } else {
-            darkModeToggle.textContent = '🌙 Dark Mode';
-        }
-    }
-
-    function toggleCollapsible(id) {
-        const content = document.getElementById(id);
-        const arrow = document.getElementById(id.replace('Controls', 'Arrow'));
-
-        content.classList.toggle('active');
-        arrow.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
-    }
-
-    function handleKeyboardShortcuts(event) {
-        if (event.ctrlKey || event.metaKey) {
-            switch (event.key) {
-                case 'Enter':
-                    event.preventDefault();
-                    convertToHandwriting();
-                    break;
-                case 'd':
-                    event.preventDefault();
-                    if (pages.length > 0) {
-                        showDownloadOptions();
-                    }
-                    break;
-                case 'o':
-                    event.preventDefault();
-                    fileInput.click();
-                    break;
-            }
-        }
-    }
-
-    // Initialize the application when the DOM is loaded
-    document.addEventListener('DOMContentLoaded', init);
-
-    // Make toggleCollapsible available globally
-    window.toggleCollapsible = toggleCollapsible;
+</html>
